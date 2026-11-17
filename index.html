@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yogit</title>
+<style>
+:root{
+ color-scheme:light dark;
+ --ink:#17142b;--ink2:#5d5a78;--ink3:#8b88a3;
+ --bg:#f3f2fa;--surf:#ffffff;--surf2:#f6f5fc;--line:rgba(36,28,90,.09);
+ --p:#5b3fd6;--p2:#7c5cf0;--pdeep:#2b1b78;--pink:#ece8ff;
+ --acc:#18c29c;--acc-ink:#04382c;--danger:#e0384f;--dangerbg:#fdecef;
+ --grad:linear-gradient(135deg,#7c5cf0 0%,#5b3fd6 55%,#3d2aa8 100%);
+ --glass:rgba(255,255,255,.72);
+ --sh1:0 1px 2px rgba(30,20,90,.06),0 2px 8px rgba(30,20,90,.05);
+ --sh2:0 2px 4px rgba(30,20,90,.05),0 10px 28px rgba(30,20,90,.10);
+ --ring:0 0 0 3px rgba(124,92,240,.35);
+ --r:20px;--navh:68px;--sb:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){:root{
+ --ink:#f1efff;--ink2:#b3afd2;--ink3:#8581a8;
+ --bg:#0e0c1f;--surf:#19163a;--surf2:#211d49;--line:rgba(190,180,255,.12);
+ --p:#9a82ff;--p2:#8b6cff;--pdeep:#cfc4ff;--pink:#2a2460;
+ --acc:#3ddcb4;--acc-ink:#03261d;--danger:#ff6b80;--dangerbg:#3a1a26;
+ --grad:linear-gradient(135deg,#8b6cff 0%,#6a47ea 55%,#4a2fc4 100%);
+ --glass:rgba(20,17,48,.72);
+ --sh1:0 1px 2px rgba(0,0,0,.4);--sh2:0 10px 30px rgba(0,0,0,.45);
+ --ring:0 0 0 3px rgba(154,130,255,.45);
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Hebrew","Arial Hebrew",Arial,sans-serif;background:
+ radial-gradient(120% 40% at 100% 0,rgba(124,92,240,.14),transparent 70%),var(--bg);
+ color:var(--ink);line-height:1.5;padding-bottom:calc(var(--navh) + var(--sb) + 28px);-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:6;display:flex;align-items:center;justify-content:space-between;gap:10px;
+ padding:calc(12px + env(safe-area-inset-top,0px)) 20px 12px;background:var(--glass);
+ -webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border-bottom:1px solid var(--line)}
+header b{font-size:19px;font-weight:800;letter-spacing:-.2px;display:flex;align-items:center;gap:10px}
+header b::before{content:"";width:26px;height:26px;border-radius:9px;background:var(--grad) ;box-shadow:0 3px 10px rgba(91,63,214,.4);
+ -webkit-mask:none}
+header span{color:var(--ink3);font-size:14px}
+main{padding:18px 16px 8px;max-width:720px;margin:0 auto}
+main.v{animation:vin .22s ease-out}
+@keyframes vin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2{margin:8px 2px 16px;font-size:28px;line-height:1.25;font-weight:800;letter-spacing:-.5px}
+h2.crumb{font-size:15px;font-weight:600;letter-spacing:0;color:var(--ink3);line-height:1.9;margin-bottom:14px}
+a{color:var(--p);text-decoration:none;cursor:pointer;font-weight:600}
+.crumb a{color:var(--p);display:inline-block;padding:4px 2px}
+.crumb a:last-child{color:var(--ink)}
+.row{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.box{flex:1;min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:var(--r);padding:14px 18px;font-size:17px;font-weight:600;
+ background:var(--surf);box-shadow:var(--sh1);border:1px solid var(--line);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.box:active{transform:scale(.985);box-shadow:none}
+.chev{flex:none;width:18px;height:18px;color:var(--ink3)}
+.ico,.x{flex:none;width:44px;height:44px;display:grid;place-items:center;background:none;border:0;border-radius:14px;color:var(--ink3);padding:0;cursor:pointer;transition:background .12s,transform .12s}
+.ico svg,.x svg{width:20px;height:20px}
+.ico:active,.x:active{background:var(--pink);transform:scale(.92)}
+.x{color:var(--danger)}
+.x:active{background:var(--dangerbg)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;background:var(--grad);color:#fff;border:0;border-radius:18px;padding:14px 18px;font:700 17px/1.2 inherit;font-family:inherit;cursor:pointer;margin:14px 0;
+ box-shadow:0 8px 20px rgba(91,63,214,.32),inset 0 1px 0 rgba(255,255,255,.22);transition:transform .12s,box-shadow .12s,filter .12s}
+.btn:active{transform:scale(.97);box-shadow:0 3px 8px rgba(91,63,214,.3);filter:brightness(.95)}
+.btn.sec{background:var(--surf);color:var(--p);box-shadow:var(--sh1);border:1.5px solid var(--line);text-align:start;justify-content:flex-start;font-weight:600;font-size:16px}
+.btn.sec:active{background:var(--pink)}
+.btn.red{background:var(--dangerbg);color:var(--danger);box-shadow:none;border:1.5px solid transparent}
+.btn.red:active{background:var(--danger);color:#fff}
+.btn svg{width:20px;height:20px;flex:none}
+button:focus-visible,a:focus-visible,.box:focus-visible,.rep:focus-visible{outline:none;box-shadow:var(--ring)}
+label{display:block;color:var(--ink2);font-size:14px;font-weight:700;margin:18px 4px 7px}
+textarea,input,select{width:100%;min-height:50px;border:1.5px solid var(--line);border-radius:16px;padding:13px 15px;font-size:17px;background:var(--surf);color:var(--ink);font-family:inherit;box-shadow:var(--sh1);transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b88a3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center;padding-left:40px}
+textarea{min-height:104px;resize:vertical;line-height:1.55}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--p2);box-shadow:var(--ring)}
+::placeholder{color:var(--ink3)}
+input[type=file]{padding:9px;font-size:15px;color:var(--ink2);box-shadow:none;border-style:dashed;background:var(--surf2)}
+input[type=file]::file-selector-button{margin-inline-end:12px;border:0;border-radius:12px;padding:10px 14px;background:var(--pink);color:var(--p);font:700 14px inherit;font-family:inherit;cursor:pointer}
+.card{background:var(--surf);border-radius:var(--r);padding:8px 16px 16px;margin-bottom:16px;box-shadow:var(--sh2);border:1px solid var(--line)}
+.card textarea,.card input,.card select{background:var(--surf2);box-shadow:none}
+.card label{margin-top:14px}
+.card .ihead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px -8px 0 -8px;padding-inline-start:8px}
+.card .ihead b{font-size:16px;line-height:1.4;display:flex;align-items:center;gap:10px}
+.card .ihead .n{flex:none;min-width:28px;height:28px;border-radius:10px;background:var(--pink);color:var(--p);display:grid;place-items:center;font-size:14px}
+.rep{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 8px;cursor:pointer;border-radius:14px;transition:background .12s}
+.rep+.rep{border-top:1px solid var(--line);border-radius:0}
+.rep:active{background:var(--pink)}
+.rep .main{flex:1;min-width:0}
+.rep .a{color:var(--ink);font-weight:700;font-size:17px;overflow:hidden;text-overflow:ellipsis}
+.rep .c{color:var(--ink2);font-size:15px}
+.rep .d{color:var(--ink3);text-align:left;white-space:nowrap;font-size:13px;line-height:1.6}
+.rep .m{font-size:13px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis}
+.list{background:var(--surf);border-radius:24px;padding:6px 10px;margin-top:16px;box-shadow:var(--sh2);border:1px solid var(--line)}
+.tog{display:flex;align-items:center;justify-content:space-between}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 20px 26px;color:var(--ink2);gap:6px}
+.empty svg{width:96px;height:96px;margin-bottom:6px}
+.empty b{color:var(--ink);font-size:17px}
+.empty span{font-size:15px;max-width:26ch}
+nav{position:fixed;bottom:0;right:0;left:0;z-index:7;display:flex;gap:4px;padding:8px 12px calc(8px + var(--sb));background:var(--glass);
+ -webkit-backdrop-filter:saturate(1.6) blur(20px);backdrop-filter:saturate(1.6) blur(20px);border-top:1px solid var(--line)}
+nav button{flex:1;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;background:none;color:var(--ink3);font:600 12px/1.2 inherit;font-family:inherit;cursor:pointer;padding:0 2px}
+nav button .pill{display:grid;place-items:center;width:58px;height:30px;border-radius:15px;transition:background .2s,color .2s,transform .12s}
+nav button svg{width:22px;height:22px}
+nav button:active .pill{transform:scale(.92)}
+nav button.on{color:var(--p);font-weight:800}
+nav button.on .pill{background:var(--pink)}
+.photos{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.photos:empty{display:none}
+.photos div{position:relative}
+.photos img{width:96px;height:96px;object-fit:cover;border-radius:16px;display:block;box-shadow:var(--sh1);border:1px solid var(--line)}
+.photos button{position:absolute;top:-6px;left:-6px;width:28px;height:28px;display:grid;place-items:center;background:rgba(20,15,50,.78);color:#fff;border:2px solid var(--surf);border-radius:50%;font-size:15px;line-height:1;padding:0}
+.tot{position:sticky;bottom:calc(var(--navh) + var(--sb) + 10px);z-index:4;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;padding:14px 20px;border-radius:20px;
+ background:var(--grad);color:#fff;font-size:15px;font-weight:600;box-shadow:0 10px 30px rgba(43,27,120,.38),inset 0 1px 0 rgba(255,255,255,.2)}
+.tot span{font-size:24px;font-weight:800;letter-spacing:-.4px;font-variant-numeric:tabular-nums;color:#fff;direction:rtl}
+.muted{color:var(--ink3)}
+p.muted{margin:10px 4px}
+.sethint{color:var(--ink3);font-size:14px;margin:-2px 4px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+ header,nav,.noprint,.btn,.x,.ico,.tot::before{display:none!important}
+ body{background:#fff;color:#000;padding:0}main{padding:0;max-width:none;animation:none}
+ .card{border:1px solid #bbb;box-shadow:none;break-inside:avoid;background:#fff}
+ .card textarea,.card input{background:#fff}
+ textarea,input{border:0;padding:0;resize:none;box-shadow:none;min-height:0;color:#000}
+ .tot{position:static;background:#fff;color:#000;box-shadow:none;border-top:2px solid #000;border-radius:0}
+ .tot span{color:#000}
+ .photos img{box-shadow:none}
+}
+
+.ov{position:fixed;inset:0;background:rgba(10,8,30,.5);backdrop-filter:blur(3px);z-index:50;display:flex;align-items:flex-end}
+.sheet{width:100%;background:var(--surf);border-radius:28px 28px 0 0;padding:18px 16px calc(18px + var(--sb));box-shadow:var(--sh2)}
+.sheet h3{margin:0 0 4px;font-size:18px;color:var(--ink)}.sheet p{margin:0 0 16px;color:var(--ink3);font-size:14px}
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.acts button{background:none;border:0;font:inherit;font-size:14px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 0;cursor:pointer}
+.acts i{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;box-shadow:var(--sh2);font-style:normal}
+.acts svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chk{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 4px;color:var(--ink2);font-size:17px}
+.chk input{width:26px;height:26px;accent-color:var(--p);flex:none}
+.mtag{display:inline-block;background:var(--pink);color:var(--p);border-radius:8px;padding:1px 8px;font-size:12px;margin-inline-start:6px}
+
+.seg{display:flex;gap:6px;background:var(--surf2);padding:5px;border-radius:16px;margin:0 0 16px}
+.seg button{flex:1;border:0;background:none;font:inherit;font-size:16px;font-weight:700;color:var(--ink2);padding:12px 4px;border-radius:12px;cursor:pointer}
+.seg button.on{background:var(--surf);color:var(--p);box-shadow:var(--sh1)}
+.sw{width:26px!important;height:26px;accent-color:var(--p);flex:none;margin:0}
+.fb{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.itag{font-size:12px;color:var(--danger);margin-inline-start:6px}
+.lg img{max-height:90px;max-width:100%;border-radius:10px;margin-top:8px;display:block}
+@media print{.internal{display:none!important}}
+input[type=checkbox]{-webkit-appearance:checkbox!important;appearance:auto!important;width:26px!important;min-width:26px;height:26px!important;padding:0!important;margin:0;border-radius:6px;box-shadow:none!important;background:none;accent-color:var(--p);flex:none}
+
+body.lo header,body.lo nav{display:none}
+body.lo{padding-bottom:0}
+header b{letter-spacing:.2px}
+.lgn{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:24px 4px 60px;margin:-16px}
+.lgn .brand{text-align:center;margin-bottom:26px}
+.lgn .mark{width:72px;height:72px;border-radius:22px;background:var(--grad);display:grid;place-items:center;margin:0 auto 14px;box-shadow:0 14px 30px rgba(91,63,214,.35)}
+.lgn .mark svg{width:38px;height:38px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.lgn .wm{font-size:58px;font-weight:800;letter-spacing:-1.5px;line-height:1;direction:ltr;color:var(--ink)}
+.lgn .wm span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lgn .tag{color:var(--ink3);margin-top:8px;font-size:15px}
+.lgn form{background:var(--surf);border-radius:28px;padding:10px 20px 22px;margin:0 16px;box-shadow:var(--sh2)}
+.lgn .err{color:var(--danger);min-height:22px;margin:10px 2px 0;font-size:15px}
+.lgn .hint{text-align:center;color:var(--ink3);font-size:13px;margin-top:16px}
+
+.att{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.att button{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;border-radius:16px;background:var(--pink);color:var(--p);font:inherit;font-size:14px;font-weight:700;padding:12px 4px;cursor:pointer}
+.att button:active{transform:scale(.97)}
+.att svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.att-t{color:var(--ink3);font-size:14px;margin:6px 2px 0}
+</style>
+</head>
+<body>
+<header><b id="ttl" style="direction:ltr">Yogit</b><span id="sub"></span></header>
+<main id="app"></main>
+<nav class="noprint">
+ <button id="n-reports" onclick="tab('reports')"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>דוחות</button>
+ <button id="n-repo" onclick="tab('repo')"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5M3 17.5 12 22l9-4.5"/></svg></span>מאגר ליקויים</button>
+ <button id="n-set" onclick="tab('set')"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span>הגדרות</button>
+</nav>
+<script>
+const KEY='bedek_demo20_v1';
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>new Date().toLocaleDateString('he-IL').replace(/\//g,'.');
+
+function seedEmpty(){
+  const base={'צבע וטיח':['כללי','טיח פנים','שליכט צבעוני וטיח חוץ','צבע ברזל'],'חיפוי':['כללי'],'ריצוף':['כללי'],'גבס':['כללי'],'דלתות':['כללי'],'חלונות ועבודות אלומיניום':['כללי'],'ציפוי קירות חוץ':['כללי'],'כלים סניטריים':['כללי'],'אינסטלציה':['כללי'],'חשמל':['כללי'],'בנייה':['כללי']};
+  return {repo:Object.keys(base).map(n=>({id:uid(),name:n,subs:base[n].map(s=>({id:uid(),name:s,defects:[]}))})),reports:[]};
+}
+function ph(t,c){const s=`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='450'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${c}'/><stop offset='1' stop-color='#1b1b2f'/></linearGradient></defs><rect width='600' height='450' fill='url(#g)'/><circle cx='300' cy='190' r='46' fill='none' stroke='#fff' stroke-width='6' opacity='.8'/><text x='300' y='300' font-size='34' fill='#fff' text-anchor='middle' font-family='Arial'>${t}</text></svg>`;return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)}
+function seed(){
+  const D={
+   'צבע וטיח':{
+     'כללי':[['כתמי צבע ומריחות על משקופים וחלונות','ניקוי וצביעה מקומית','','',180],['צבע מתקלף בתקרת חדר הרחצה (לחות)','טיפול בעובש ויישום צבע נגד עובש','כדאי לבדוק אוורור בחדר','',450]],
+     'טיח פנים':[['סדקים בטיח בקירות הסלון, ברוחב של עד 2 מ״מ','פתיחת הסדק, מילוי בחומר גמיש, הדבקת רשת סיבים וצביעה מחדש','לבדוק שוב אחרי עונת החורף','לפי הנחיות היצרן',650],['טיח חלול (נשמע חלול בהקשה) ליד החלון','הסרת הטיח החלול וטיוח מחדש','','נוהג מקובל בעבודות טיח',900],['קירות לא ישרים – סטייה מהאנך במסדרון','תיקון מקומי בהתאם לתקן','','בהתאם לתקן הרלוונטי',1300],['חספוס וגרגרים בטיח בחדר הילדים','שיוף וצביעה מחדש','','',380]],
+     'שליכט צבעוני וטיח חוץ':[['התקלפות שליכט בקיר חוץ של המרפסת','הסרת האזורים המתקלפים, יישום שליכט מחדש ואיטום','','',1200],['סדק אופקי בשליכט מתחת לחלון','מילוי, חיזוק ברשת והשלמת שליכט','','',700]],
+     'צבע ברזל':[['חלודה בצבע על מעקה המרפסת','ניקוי, שיוף, צבע יסוד נגד חלודה וצבע עליון','','',420],['שכבת צבע דקה על דלת הכניסה (שקיפות)','צבע נוסף בשתי שכבות','','',350]]},
+   'חיפוי':{'כללי':[['אריח סדוק בחיפוי המטבח','החלפת האריח הסדוק','יש לוודא אריח חלופי באותו גוון','',300],['פוגות לא אחידות בחיפוי חדר הרחצה','ניקוי ומילוי פוגות מחדש','','',420],['אריח חסר בפינת האמבטיה','השלמת אריח באותו גוון','','',250],['חיפוי לא מפולס – קו אופקי עקום','תיקון או החלפת שורה','','',1400]]},
+   'ריצוף':{'כללי':[['אריחים חלולים בחדר הרחצה (צליל חלול בהקשה)','הרמת האריחים והדבקה מחדש בדבק מתאים','','נוהג מקובל בעבודות ריצוף',1100],['הפרשי גובה בין אריחים סמוכים','שיוף או החלפת האריחים הבולטים','','',800],['רובה (פוגות) סדוקה ונופלת','ניקוי ומילוי פוגות מחדש','','',350],['שיפוע לא תקין במקלחון – מים עומדים','תיקון שיפועים ואיטום מחדש','נדרשת בדיקת הצפה','לפי הנחיות איטום',1800],['שבר בפינת אריח במרפסת','החלפת האריח','','',300],['חיתוך לא נקי של אריחים ליד הקיר','החלפת פנל או פס רובה','','',200],['מעבר בין סוגי ריצוף ללא פס מעבר','התקנת פרופיל מעבר','','',160]]},
+   'גבס':{'כללי':[['סדק בחיבור בין קיר גבס לתקרה','מילוי, סרט רשת וצביעה','','',450],['חיבורי לוחות גבס גלויים לאחר צביעה','שפכטל, שיוף וצביעה','','',600],['תקרה מונמכת לא מפולסת בסלון','כוונון מתלים ופילוס','','',900]]},
+   'דלתות':{'כללי':[['דלת חדר שינה חורקת ולא נסגרת עד הסוף','כוונון צירים ושימון','','',150],['דלת כניסה לא נסגרת בחוזקה (מנעול לא מיושר)','כוונון מנעול ושלבי הציר','','',200],['שפשוף דלת פנים במשקוף','הקטנת הדלת וכוונון','','',180],['ידית רופפת בדלת האמבטיה','הידוק או החלפה','','',90]]},
+   'חלונות ועבודות אלומיניום':{'כללי':[['איטום לקוי סביב חלון הסלון (חדירת רוח)','החלפת איטום הסיליקון','','',380],['גלגלת תריס שבורה בחדר הילדים','החלפת גלגלת התריס','','',260],['חלון נפתח בקושי (חיכוך בפרופיל)','ניקוי ושימון מסילות','','',150],['תריס חשמלי לא מגיב','בדיקת מנוע ומפסק','','',420],['זכוכית שרוטה בחלון המטבח','החלפת זכוכית','לבדוק אחריות','',850]]},
+   'ציפוי קירות חוץ':{'כללי':[['אבן חיפוי חוץ שאינה מקובעת היטב','הדבקה מחדש וקיבוע מכני','בטיחות – טיפול מיידי','',1600],['כתמי רטיבות בחזית הבניין','איתור מקור הרטיבות ואיטום','','',1200]]},
+   'כלים סניטריים':{'כללי':[['דליפה מהסיפון בכיור האמבטיה','החלפת סיפון והידוק חיבורים','','',280],['אסלה לא מקובעת היטב לרצפה','קיבוע מחדש ואיטום בסיליקון','','',240],['מושב אסלה רופף','הידוק או החלפה','','',60],['ברז כיור מטפטף','החלפת אטם או ברז','','',200],['סדק בפורצלן של הכיור','החלפת כיור','','',900],['מערכת הדחה ניקוז איטי','ניקוי וכוונון מנגנון','','',250]]},
+   'אינסטלציה':{'כללי':[['לחץ מים נמוך בברז המטבח','ניקוי מסננים ובדיקת ברז הניתוק','','',300],['חשד לנזילה בצנרת מאחורי קיר האמבטיה','בדיקת לחות ואיתור נזילות על ידי בודק מוסמך','דחוף – לבדוק לפני סגירת הקיר','',1500],['ניקוז איטי במקלחון','פתיחת סתימה ובדיקת שיפועים','','',350],['לחץ מים גבוה לא מווסת בדוד','התקנת וסת לחץ','','',500],['חיבור גמיש ישן תחת הכיור','החלפת חיבורים גמישים','','',180]]},
+   'חשמל':{'כללי':[['שקע חשמל רופף בחדר השינה','קיבוע או החלפת השקע','','',120],['חיבור הארקה חסר בשקע באמבטיה','תיקון הארקה על ידי חשמלאי מוסמך','בטיחות – טיפול מיידי','לפי חוק החשמל',450],['חיווט גלוי בארון החשמל ללא סימון','סימון מעגלים וסידור','','',300],['מפסק לא פועל בחדר הילדים','החלפת מפסק','','',110],['נורת חירום לא פועלת בחדר המדרגות','החלפת נורה או סוללה','','',250],['חשד לחוסר מפסק פחת בלוח הדירה','בדיקת פחת על ידי חשמלאי מוסמך','בטיחות – טיפול מיידי','לפי חוק החשמל',700]]},
+   'בנייה':{'כללי':[['סדק אלכסוני בקיר בטון בחניה','בדיקת מהנדס קונסטרוקציה','דחוף','',2500],['חדירת מים דרך תפר בטון','איטום התפר בחומר ייעודי','','',1500],['איטום גג לא רציף (בעיית חפיפה)','תיקון איטום ובדיקת הצפה','','',3200]]},
+   'מטבח ונגרות':{'כללי':[['דלת ארון מטבח לא מיושרת','כוונון ציר','','',120],['סדק קטן במשטח העבודה','תיקון או החלפה','','',1100],['מגירה לא נסגרת חלק','החלפת מסילה','','',220]]},
+   'מיזוג ואוורור':{'כללי':[['מזגן מטפטף מים מהיחידה הפנימית','ניקוי ניקוז ובדיקת שיפוע','','',280],['תמיכה לא מספקת ליחידת חוץ','חיזוק התושבת','','',400],['מפוח אוורור רועש בחדר הרחצה','החלפת מפוח','','',350]]},
+   'נגישות ובטיחות':{'כללי':[['מעקה מרפסת נמוך מהנדרש','הגבהת המעקה בהתאם לדרישות','בטיחות','לפי תקנות הבנייה',2200],['מדרגה בשיפוע לא אחיד בכניסה','תיקון המדרגה','','',600]]}
+  };
+  const cols=['#7556c4','#3b82f6','#0ea5a4','#e07a2f','#c0457a','#5b8c3a'];let ci=0;
+  const repo=Object.keys(D).map(cn=>({id:uid(),name:cn,subs:Object.keys(D[cn]).map(sn=>({id:uid(),name:sn,
+    defects:D[cn][sn].map(a=>({id:uid(),desc:a[0],rec:a[1],note:a[2],quote:a[3],cost:String(a[4]),img:(a[4]>=1000?ph('מפרט',cols[ci++%cols.length]):'')}))}))}));
+  const all=[];repo.forEach(c=>c.subs.forEach(s=>s.defects.forEach(d=>all.push({c:c.name,s:s.name,d}))));
+  let seedN=20261117;const rnd=()=>{seedN|=0;seedN=seedN+0x6D2B79F5|0;let t=Math.imul(seedN^seedN>>>15,1|seedN);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+  const techs=[['עמית לוי (101)','הנדסאי בניין, בודק מורשה','12 שנות ניסיון בבדיקת דירות חדשות ומשומשות'],['נועה בן דוד (102)','מהנדסת אזרחית','8 שנות ניסיון בפיקוח ובדק בית'],['רוני אזולאי (103)','הנדסאי אדריכלות ובודק בניין','15 שנות ניסיון בליווי רוכשי דירות']];
+  const places=['הרצל 14, דירה 8, חיפה','הגפן 3, רמת גן','שדרות הנשיא 27, דירה 12, באר שבע','הדקל 9, כפר סבא','ביאליק 52, דירה 4, פתח תקווה','הנביאים 17, דירה 21, ירושלים','אלנבי 88, דירה 6, תל אביב','הזית 5, מודיעין','רוטשילד 31, דירה 9, ראשון לציון','התמר 12, נתניה','סוקולוב 40, דירה 15, הרצליה','העצמאות 66, דירה 3, אשדוד','הלל 7, חולון','הכרמל 23, דירה 10, חיפה','השושנים 4, רעננה','דרך חברון 101, דירה 18, ירושלים','ויצמן 19, דירה 2, גבעתיים','האלון 8, יבנה','בן גוריון 35, דירה 14, בת ים','הפרחים 6, קריית אונו'];
+  const clients=['דנה כהן','יוסי אברהם','מירב ולירן שגב','אורי פרידמן','טל ושירן מזרחי','רועי ביטון','נועם ואיילת פרץ','שרית אוחיון','גיא דהן','עדי רוזנברג','מאיה ואבי חיים','איתן לוינסון','הילה קורן','עומר בן שושן','ליאת אשכנזי','רן ומיכל סעדון','ענת גבאי','יונתן שפירא','לילך ברק','אלון מלכה'];
+  const props=['דירת 4 חדרים בקומה 3, בניין בן 12 שנה, כ-105 מ״ר','דירת גן חדשה מקבלן, 5 חדרים, כ-140 מ״ר','דירת 3 חדרים בקומה 1, בניין בן 25 שנה','בית פרטי דו-קומתי, כ-180 מ״ר','דירת גג עם מרפסת גדולה, 4.5 חדרים','דירת 2.5 חדרים, קומה 2, בניין חדש'];
+  const mon=n=>{const d=new Date(2026,10,17-n*1);return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear()};
+  const logo=ph('הלוגו שלי','#5b3fd6');
+  const reports=places.map((addr,i)=>{
+    const t=techs[i%3],n=4+Math.floor(rnd()*5),used=new Set(),items=[];
+    while(items.length<n){const k=Math.floor(rnd()*all.length);if(used.has(k))continue;used.add(k);const x=all[k],d=x.d;
+      const np=1+Math.floor(rnd()*2),lab=d.desc.split(' ').slice(0,3).join(' ');
+      const ph2=[];for(let j=0;j<np;j++)ph2.push(ph(j?lab+' – מקרוב':lab,cols[ci++%cols.length]));
+      items.push({cat:x.c+' › '+x.s,desc:d.desc,rec:d.rec,note:d.note,cost:d.cost,photos:ph2})}
+    return {id:uid(),address:addr,client:clients[i],email:'client'+(i+1)+'@example.com',date:mon(i),tech:t[0],master:i===5||i===14,items,
+      f:{desc:props[i%props.length],notes:'הבדיקה בוצעה בנוכחות '+(i%2?'הדיירת':'הדייר')+'. כל המדידות ויזואליות.',vdate:mon(i),general:'מומלץ לתקן את הליקויים לפי סדר העדיפות ולבצע בדיקה חוזרת לאחר התיקונים.',internal:'לתאם '+(i%2?'שיחת סיכום':'בדיקה חוזרת')+' עם הלקוח',logo,edu:t[1],exp:t[2]}}});
+  return {repo,reports:reports.reverse()};
+}
+
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.repo)return d}catch(e){}return seed()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){if(e&&(e.name==='QuotaExceededError'||e.code===22))alert('נגמר המקום באחסון. תעשה גיבוי ותמחק תמונות ישנות.')}}
+let db=load();
+let S={rt:'defects',tab:'reports',path:[],rid:null,q:'',tech:'',draft:null,pick:{c:'',s:''}};
+
+function defFields(){return [
+ {id:'desc',label:'תיאור הנכס',type:'area',on:true},
+ {id:'notes',label:'הערות',type:'area',on:true},
+ {id:'vdate',label:'תאריך הביקורת',type:'text',on:true},
+ {id:'showatt',label:'הצג נספחים',type:'toggle',on:true},
+ {id:'internal',label:'הערה (לשימוש פנימי)',type:'area',on:true,internal:true},
+ {id:'general',label:'הערות כלליות',type:'area',on:true},
+ {id:'logo',label:'לוגו',type:'logo',on:true},
+ {id:'edu',label:'השכלה',type:'area',on:true},
+ {id:'exp',label:'נסיון',type:'area',on:true}]}
+if(!db.fields){db.fields=defFields();save()}
+S.rt='defects';
+function repoView(){
+  const seg=`<div class="seg"><button class="${S.rt==='defects'?'on':''}" onclick="S.rt='defects';S.path=[];render()">מאגר הליקויים שלך</button><button class="${S.rt==='fields'?'on':''}" onclick="S.rt='fields';render()">רשימת השדות שלך</button></div>`;
+  return seg+(S.rt==='fields'?fieldsView():repoView0());
+}
+function fieldsView(){
+  return `<h2>רשימת השדות שלך</h2><p class="muted" style="margin-top:-6px">בחר אילו שדות יופיעו בדוח.</p>`+db.fields.map(f=>`<div class="row"><button class="ico" onclick="fRen('${f.id}')">✎</button><div class="box fb"><span>${esc(f.label)}${f.internal?'<span class="itag">פנימי</span>':''}</span><input class="sw" type="checkbox" ${f.on?'checked':''} onchange="fTog('${f.id}',this.checked)"></div><button class="x" onclick="fDel('${f.id}')">×</button></div>`).join('')+`<button class="btn" onclick="fAdd()">חדש</button>`;
+}
+function fTog(id,v){db.fields.find(f=>f.id===id).on=v;save()}
+function fRen(id){const f=db.fields.find(x=>x.id===id);const n=prompt('שם השדה:',f.label);if(n){f.label=n;save();render()}}
+function fDel(id){if(confirm('למחוק את השדה?')){db.fields=db.fields.filter(f=>f.id!==id);save();render()}}
+function fAdd(){const n=prompt('שם השדה החדש:');if(n){db.fields.push({id:uid(),label:n,type:'area',on:true});save();render()}}
+function fv(id,v){const r=R();r.f=r.f||{};r.f[id]=v;save()}
+function fieldsBlock(r){
+  const f0=r.f||{};
+  const on=db.fields.filter(f=>f.on);
+  if(!on.length)return '';
+  return `<div class="card">`+on.map(f=>{
+    const v=f0[f.id],lab=`<label>${esc(f.label)}${f.internal?'<span class="itag">פנימי – לא יודפס</span>':''}</label>`,cls=f.internal?'internal':'';
+    if(f.type==='toggle')return `<label class="chk noprint"><span>${esc(f.label)}</span><input type="checkbox" ${v===false?'':'checked'} onchange="fv('${f.id}',this.checked);render()"></label>`;
+    if(f.type==='logo')return `<div class="lg ${cls}">${lab}${v?`<img src="${v}">`:''}<input class="noprint" type="file" accept="image/*" style="margin-top:8px" onchange="readImg(this.files[0],u=>{fv('${f.id}',u);render()})"></div>`;
+    if(f.type==='text')return `<div class="${cls}">${lab}<input value="${esc(v||'')}" oninput="fv('${f.id}',this.value)"></div>`;
+    return `<div class="${cls}">${lab}<textarea oninput="fv('${f.id}',this.value)">${esc(v||'')}</textarea></div>`;
+  }).join('')+`</div>`+((db.fields.find(f=>f.id==='showatt')||{}).on&&f0.showatt===false?'<style media="print">.photos{display:none}</style>':'');
+}
+
+function tab(t){S.tab=t;S.path=[];S.rid=null;S.draft=null;render()}
+function go(p){S.path=p;S.draft=null;render()}
+const $=id=>document.getElementById(id);
+
+function readImg(file,cb){
+  const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+    const k=Math.min(1,900/Math.max(im.width,im.height));
+    const c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.65))};
+    im.src=r.result};
+  r.readAsDataURL(file);
+}
+
+/* ---------- מאגר ליקויים ---------- */
+const IC={chev:`<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>`,plus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`};
+const emptySvg=`<svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="var(--pink)"/><path d="M26 50 48 30l22 20" stroke="var(--p)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="32" y="48" width="32" height="22" rx="4" fill="var(--surf)" stroke="var(--p)" stroke-width="4"/><rect x="44" y="57" width="8" height="13" rx="2" fill="var(--acc)"/><circle cx="70" cy="68" r="10" fill="var(--acc)"/><path d="m66 68 3 3 5-6" stroke="var(--acc-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const empty=(t,s)=>`<div class="empty">${emptySvg}<b>${t}</b><span>${s}</span></div>`;
+
+function repoView0(){
+  const [c,s,d]=S.path;
+  const cat=db.repo.find(x=>x.id===c);
+  const sub=cat&&cat.subs.find(x=>x.id===s);
+  let cr=`<a onclick="go([])">מאגר הליקויים שלך</a>`;
+  if(cat)cr+=` ‹ <a onclick="go(['${c}'])">${esc(cat.name)}</a>`;
+  if(sub)cr+=` ‹ <a onclick="go(['${c}','${s}'])">${esc(sub.name)}</a>`;
+  if(d)cr+=` ‹ <a>${d==='new'?'חדש':'עריכה'}</a>`;
+  let h=`<h2 class="crumb">${cr}</h2>`;
+  if(d)return h+defectForm(sub,d);
+  const rowsOf=(list,lvl,openFn)=>list.map(x=>`<div class="row"><button class="ico" aria-label="עריכה" onclick="ren(${lvl},'${x.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><div class="box" onclick="${openFn(x)}"><span>${esc(lvl===2?(x.desc||'(ללא תיאור)').slice(0,60):x.name)}</span>${IC.chev}</div><button class="x" aria-label="מחיקה" onclick="del(${lvl},'${x.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join('');
+  if(!cat)h+=rowsOf(db.repo,0,x=>`go(['${x.id}'])`)+`<button class="btn" onclick="add(0)">${IC.plus}חדש</button>`;
+  else if(!sub)h+=rowsOf(cat.subs,1,x=>`go(['${c}','${x.id}'])`)+`<button class="btn" onclick="add(1)">${IC.plus}חדש</button>`;
+  else h+=(sub.defects.length?rowsOf(sub.defects,2,x=>`go(['${c}','${s}','${x.id}'])`):empty('אין ליקויים בקטגוריה הזו','הוסיפו ליקוי כדי להשתמש בו שוב בכל דוח.'))+`<button class="btn" onclick="go(['${c}','${s}','new'])">${IC.plus}חדש</button>`;
+  return h;
+}
+function cur(){const [c,s]=S.path;const cat=db.repo.find(x=>x.id===c);return {cat,sub:cat&&cat.subs.find(x=>x.id===s)}}
+function listAt(l){const {cat,sub}=cur();return l===0?db.repo:l===1?cat.subs:sub.defects}
+function add(l){const n=prompt('שם:');if(!n)return;
+  listAt(l).push(l===0?{id:uid(),name:n,subs:[{id:uid(),name:'כללי',defects:[]}]}:{id:uid(),name:n,defects:[]});save();render()}
+function ren(l,id){const it=listAt(l).find(x=>x.id===id);
+  if(l===2){go([...S.path,id]);return}
+  const n=prompt('שם חדש:',it.name);if(n){it.name=n;save();render()}}
+function del(l,id){if(!confirm('למחוק?'))return;const a=listAt(l);a.splice(a.findIndex(x=>x.id===id),1);save();render()}
+
+
+const AIC={paste:'<svg viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h2"/></svg>',gal:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>',cam:'<svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13" r="3.5"/></svg>'};
+function attachBar(t){return `<div class="att noprint"><button type="button" onclick="pasteImg(${t})">${AIC.paste}הדבק תמונה</button><button type="button" onclick="pickImg(${t},false)">${AIC.gal}מהגלריה</button><button type="button" onclick="pickImg(${t},true)">${AIC.cam}צלם</button></div>`}
+function putImg(t,u){const y=window.scrollY;if(t==='d')S.draft.img=u;else{R().items[t].photos.push(u);save()}render();window.scrollTo(0,y)}
+function pickImg(t,cam){const i=document.createElement('input');i.type='file';i.accept='image/*';if(cam)i.setAttribute('capture','environment');i.multiple=!cam&&t!=='d';i.onchange=()=>{[...i.files].forEach(f=>readImg(f,u=>putImg(t,u)))};i.click()}
+async function pasteImg(t){try{const items=await navigator.clipboard.read();for(const it of items){const ty=it.types.find(x=>x.startsWith('image/'));if(ty){const b=await it.getType(ty);readImg(b,u=>putImg(t,u));return}}alert('לא נמצאה תמונה בלוח. העתק תמונה ונסה שוב.')}catch(e){alert('אין גישה ללוח. השתמש ב"מהגלריה".')}}
+function defectForm(sub,d){
+  if(!S.draft)S.draft=d==='new'?{id:uid(),desc:'',rec:'',note:'',quote:'',cost:'',img:''}:{...sub.defects.find(x=>x.id===d)};
+  const f=S.draft;
+  const ta=(k,l)=>`<label>${l}</label><textarea oninput="S.draft.${k}=this.value">${esc(f[k])}</textarea>`;
+  return ta('desc','תיאור הליקוי')+ta('rec','המלצה')+ta('note','הערה לבודק')+ta('quote','ציטוט / תקן')+
+   `<label>עלות</label><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--p);font-size:24px;font-weight:800">₪</span><input type="number" inputmode="decimal" value="${esc(f.cost)}" oninput="S.draft.cost=this.value"></div>
+   <label>מפרטים</label>
+   <div class="photos" id="dimg">${f.img?`<div><img src="${f.img}"><button onclick="S.draft.img='';render()">×</button></div>`:''}</div>
+   ${attachBar("'d'")}
+   <button class="btn" onclick="saveDefect('${d}')">שמור</button>
+   ${d!=='new'?`<button class="btn red" onclick="delDefect('${d}')">מחק ליקוי</button>`:''}`;
+}
+function saveDefect(d){const {sub}=cur();
+  if(d==='new')sub.defects.push(S.draft);else sub.defects[sub.defects.findIndex(x=>x.id===d)]=S.draft;
+  save();go(S.path.slice(0,2))}
+function delDefect(d){if(!confirm('למחוק?'))return;const {sub}=cur();sub.defects=sub.defects.filter(x=>x.id!==d);save();go(S.path.slice(0,2))}
+
+/* ---------- דוחות ---------- */
+function reportsView(){
+  const techs=[...new Set(db.reports.map(r=>r.tech).filter(Boolean))];
+  return `<h2>דוחות</h2>
+  <button class="btn" onclick="newReport()">${IC.plus}דוח חדש</button>
+  <label style="margin-top:8px">סינון</label>
+  <select onchange="S.tech=this.value;paintList()"><option value="">כל הטכנאים</option>${techs.map(t=>`<option ${S.tech===t?'selected':''}>${esc(t)}</option>`).join('')}</select>
+  <label class="chk"><span>דוחות מאסטר בלבד</span><input type="checkbox" ${S.master?'checked':''} onchange="S.master=this.checked;paintList()"></label>
+  <input style="margin-top:12px" placeholder="חיפוש" value="${esc(S.q)}" oninput="S.q=this.value;paintList()">
+  <div class="list" id="list">${listHtml()}</div>`;
+}
+function listHtml(){
+  const q=S.q.trim();
+  const a=db.reports.filter(r=>(!S.tech||r.tech===S.tech)&&(!S.master||r.master)&&(!q||[r.address,r.client,r.email].join(' ').includes(q))).reverse();
+  return a.length?a.map(r=>`<div class="rep" onclick="rowMenu('${r.id}')"><div class="main"><div class="a">${esc(r.address||'(ללא כתובת)')}${r.master?'<span class="mtag">מאסטר</span>':''}</div><div class="c">${esc(r.client)}</div><div class="m">${esc(r.email)}</div></div><div class="d">${esc(r.date)}<br>${esc(r.tech)}</div>${IC.chev}</div>`).join(''):empty('אין דוחות עדיין','לחצו על "דוח חדש" כדי להתחיל בדק בית ראשון.');
+}
+
+const AI={edit:'<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>',gen:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',dup:'<svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>',del:'<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>'};
+function rowMenu(id){const r=db.reports.find(x=>x.id===id);const o=document.createElement('div');o.className='ov';o.id='ov';o.onclick=e=>{if(e.target===o)closeMenu()};
+ o.innerHTML=`<div class="sheet"><h3>${esc(r.address||'(ללא כתובת)')}</h3><p>${esc(r.client)}</p><div class="acts">
+ <button onclick="closeMenu();openReport('${id}')" style="color:#3b82f6"><i style="background:#3b82f6">${AI.edit}</i>עריכה</button>
+ <button onclick="closeMenu();openReport('${id}');setTimeout(()=>window.print(),400)" style="color:#16a34a"><i style="background:#16a34a">${AI.gen}</i>הפקת דוח</button>
+ <button onclick="dupReport('${id}')" style="color:#f59e0b"><i style="background:#f59e0b">${AI.dup}</i>צור עותק</button>
+ <button onclick="rmReport('${id}')" style="color:#e0384f"><i style="background:#e0384f">${AI.del}</i>מחיקה</button></div></div>`;
+ document.body.appendChild(o)}
+function closeMenu(){const o=$('ov');if(o)o.remove()}
+function dupReport(id){const r=db.reports.find(x=>x.id===id);const c=JSON.parse(JSON.stringify(r));c.id=uid();c.address=(r.address||'')+' (עותק)';db.reports.push(c);save();closeMenu();paintList()}
+function rmReport(id){if(!confirm('למחוק את הדוח?'))return;db.reports=db.reports.filter(x=>x.id!==id);save();closeMenu();paintList()}
+function paintList(){$('list').innerHTML=listHtml()}
+function newReport(){const r={id:uid(),address:'',client:'',email:'',date:today(),tech:'',items:[]};db.reports.push(r);save();openReport(r.id)}
+function openReport(id){S.rid=id;render()}
+const R=()=>db.reports.find(r=>r.id===S.rid);
+function ru(k,v){R()[k]=v;save()}
+function iu(i,k,v){R().items[i][k]=v;save();if(k==='cost')$('tot').textContent=total()}
+const total=()=>R().items.reduce((s,x)=>s+(parseFloat(x.cost)||0),0).toLocaleString('he-IL')+' ₪';
+
+function reportView(){
+  const r=R();
+  const fld=(k,l,t='text')=>`<label>${l}</label><input type="${t}" value="${esc(r[k])}" oninput="ru('${k}',this.value)">`;
+  const cat=db.repo.find(x=>x.id===S.pick.c), sub=cat&&cat.subs.find(x=>x.id===S.pick.s);
+  return `<h2 class="crumb"><a onclick="S.rid=null;render()" class="noprint">‹ לכל הדוחות</a></h2>
+  <div class="card">${fld('address','כתובת')}${fld('client','שם לקוח')}${fld('email','אימייל','email')}${fld('date','תאריך')}${fld('tech','טכנאי')}<label class="chk"><span>דוח מאסטר (תבנית)</span><input type="checkbox" ${r.master?'checked':''} onchange="ru('master',this.checked)"></label></div>${fieldsBlock(r)}
+  <h2>ליקויים</h2>
+  ${r.items.map((x,i)=>itemCard(x,i)).join('')||empty('עוד לא נוספו ליקויים','הוסיפו ליקוי מהמאגר או כתבו ליקוי חופשי למטה.')}
+  <div class="tot">סה״כ עלות<span id="tot">${total()}</span></div>
+  <div class="card noprint"><label style="font-size:16px;color:var(--ink)">הוספה מהמאגר</label>
+   <select style="margin-top:8px" onchange="S.pick={c:this.value,s:''};render()"><option value="">בחר קטגוריה</option>${db.repo.map(c=>`<option value="${c.id}" ${c.id===S.pick.c?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+   ${cat?`<select style="margin-top:8px" onchange="S.pick.s=this.value;render()"><option value="">בחר תת-קטגוריה</option>${cat.subs.map(s=>`<option value="${s.id}" ${s.id===S.pick.s?'selected':''}>${esc(s.name)}</option>`).join('')}</select>`:''}
+   ${sub?sub.defects.map(d=>`<button class="btn sec" onclick="addFrom('${d.id}')">${IC.plus}${esc((d.desc||'ללא תיאור').slice(0,50))}</button>`).join('')||'<p class="muted">אין ליקויים בתת-קטגוריה הזו</p>':''}
+   <button class="btn sec" onclick="addFree()">${IC.plus}ליקוי חופשי</button></div>
+  <button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>הפק דוח (PDF / הדפסה)</button>
+  <button class="btn red" onclick="delReport()">מחק דוח</button>`;
+}
+function itemCard(x,i){
+  const ta=(k,l)=>`<label>${l}</label><textarea oninput="iu(${i},'${k}',this.value)">${esc(x[k])}</textarea>`;
+  return `<div class="card"><div class="ihead"><b><span class="n">${i+1}</span>${esc(x.cat||'ליקוי חופשי')}</b><button class="x noprint" aria-label="הסרה" onclick="rmItem(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  ${ta('desc','תיאור הליקוי')}${ta('rec','המלצה')}${ta('note','הערה')}
+  <label>עלות ₪</label><input type="number" inputmode="decimal" value="${esc(x.cost)}" oninput="iu(${i},'cost',this.value)">
+  <div class="photos">${(x.photos||[]).map((p,j)=>`<div><img src="${p}"><button onclick="rmPhoto(${i},${j})">×</button></div>`).join('')}</div>
+  ${attachBar(i)}</div>`;
+}
+function addFrom(id){const cat=db.repo.find(x=>x.id===S.pick.c),sub=cat.subs.find(x=>x.id===S.pick.s),d=sub.defects.find(x=>x.id===id);
+  R().items.push({cat:cat.name+' › '+sub.name,desc:d.desc,rec:d.rec,note:d.note,cost:d.cost,photos:d.img?[d.img]:[]});save();render()}
+function addFree(){R().items.push({cat:'',desc:'',rec:'',note:'',cost:'',photos:[]});save();render()}
+function rmItem(i){if(confirm('להסיר?')){R().items.splice(i,1);save();render()}}
+function rmPhoto(i,j){R().items[i].photos.splice(j,1);save();render()}
+function addPhoto(i,inp){if(!inp.files[0])return;readImg(inp.files[0],u=>{R().items[i].photos.push(u);save();render()})}
+function delReport(){if(confirm('למחוק את הדוח?')){db.reports=db.reports.filter(r=>r.id!==S.rid);save();S.rid=null;render()}}
+
+/* ---------- הגדרות וגיבוי ---------- */
+function setView(){return `<h2>הגדרות</h2>
+ <button class="btn" onclick="exp()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>גיבוי (הורדת קובץ)</button>
+ <p class="sethint">הנתונים נשמרים רק במכשיר הזה. כדאי לגבות מדי פעם.</p>
+ <label>שחזור מגיבוי</label><input type="file" accept="application/json" onchange="imp(this.files[0])">
+ <button class="btn sec" style="margin-top:34px" onclick="logout()">התנתקות (${esc(user())})</button>
+ <button class="btn red" style="margin-top:14px" onclick="if(confirm('לאפס הכל?')){db=seed();save();render()}">איפוס מלא</button>`}
+function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='bedek-backup-'+Date.now()+'.json';a.click()}
+function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.repo)throw 0;db=d;save();alert('שוחזר');render()}catch(e){alert('קובץ לא תקין')}};r.readAsText(f)}
+
+const USERK='yogit_user_v1';
+let _usr='';
+function user(){if(_usr)return _usr;try{return localStorage.getItem(USERK)||''}catch(e){return ''}}
+function loginView(){return `<div class="lgn"><div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M9 14l2.2 2.2L15.5 12"/></svg></div><div class="wm">Yo<span>git</span></div><div class="tag">דוחות בדק בית, פשוט מהשטח</div></div>
+ <form onsubmit="doLogin();return false" onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin()}" autocomplete="on"><label for="lu">שם משתמש</label><input id="lu" name="username" autocomplete="username" autocapitalize="off" value=""><label for="lp">סיסמה</label><input id="lp" name="password" type="password" autocomplete="current-password"><div class="err" id="lerr"></div><button class="btn" type="button" onclick="doLogin()" style="margin-bottom:0">כניסה</button></form>
+ <div class="hint">גרסת דמו – כל שם משתמש וסיסמה יתקבלו</div></div>`}
+function doLogin(){const u=$('lu').value.trim(),p=$('lp').value;if(!u||!p){$('lerr').textContent='נא למלא שם משתמש וסיסמה';return}_usr=u;try{localStorage.setItem(USERK,u)}catch(e){}S.tab='reports';render()}
+function logout(){_usr='';try{localStorage.removeItem(USERK)}catch(e){}S.tab='reports';S.rid=null;render()}
+
+function render(){
+  document.body.classList.toggle('lo',!user());
+  if(!user()){$('app').innerHTML=loginView();window.scrollTo(0,0);return}
+  ['reports','repo','set'].forEach(t=>$('n-'+t).className=S.tab===t?'on':'');
+  $('sub').textContent=user();
+  $('app').innerHTML=S.tab==='repo'?repoView():S.tab==='set'?setView():S.rid?reportView():reportsView();
+  const m=$('app');m.classList.remove('v');void m.offsetWidth;m.classList.add('v');
+  window.scrollTo(0,0);
+}
+render();
+</script>
+</body>
+</html>
