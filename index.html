@@ -426,7 +426,7 @@ async function sha256Hex(s){const buf=await crypto.subtle.digest('SHA-256',new T
 function user(){if(_usr)return _usr;try{return localStorage.getItem(USERK)||''}catch(e){return ''}}
 function loginView(){return `<div class="lgn"><div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M9 14l2.2 2.2L15.5 12"/></svg></div><div class="wm">Yo<span>git</span></div><div class="tag">דוחות בדק בית, פשוט מהשטח</div></div>
  <form onsubmit="doLogin();return false" onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin()}" autocomplete="on"><label for="lu">שם משתמש</label><input id="lu" name="username" autocomplete="username" autocapitalize="off" value=""><label for="lp">סיסמה</label><input id="lp" name="password" type="password" autocomplete="current-password"><div class="err" id="lerr"></div><button class="btn" type="button" id="lbtn" onclick="doLogin()" style="margin-bottom:0">כניסה</button></form></div>`}
-async function doLogin(){const u=$('lu').value.trim(),p=$('lp').value;if(!u||!p){$('lerr').textContent='נא למלא שם משתמש וסיסמה';return}
+async function doLogin(){const u=$('lu').value.trim(),p=$('lp').value.trim();if(!u||!p){$('lerr').textContent='נא למלא שם משתמש וסיסמה';return}
   const btn=$('lbtn');btn.disabled=true;
   const h=await sha256Hex(u.toLowerCase()+':'+p);
   btn.disabled=false;
