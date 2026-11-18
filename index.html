@@ -430,7 +430,7 @@ async function doLogin(){const u=$('lu').value.trim(),p=$('lp').value.trim();if(
   const btn=$('lbtn');btn.disabled=true;
   const h=await sha256Hex(u.toLowerCase()+':'+p);
   btn.disabled=false;
-  if(h!==AUTH_HASH){$('lerr').textContent='שם משתמש או סיסמה שגויים';$('lp').value='';$('lp').focus();return}
+  if(h!==AUTH_HASH){$('lerr').textContent=`שם משתמש או סיסמה שגויים (אורך שם: ${u.length}, אורך סיסמה: ${p.length})`;$('lp').value='';$('lp').focus();return}
   $('lerr').textContent='';_usr=u;try{localStorage.setItem(USERK,u)}catch(e){}S.tab='reports';render()}
 function logout(){_usr='';try{localStorage.removeItem(USERK)}catch(e){}S.tab='reports';S.rid=null;render()}
 
