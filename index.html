@@ -419,12 +419,18 @@ function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(ne
 function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.repo)throw 0;db=d;save();alert('שוחזר');render()}catch(e){alert('קובץ לא תקין')}};r.readAsText(f)}
 
 const USERK='yogit_user_v1';
+const AUTH_HASH='ae08f6eb355fb5007e6a1af524cdde7d8e5b12771ca4f94cd206fe67038d7455';
 let _usr='';
+async function sha256Hex(s){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 function user(){if(_usr)return _usr;try{return localStorage.getItem(USERK)||''}catch(e){return ''}}
 function loginView(){return `<div class="lgn"><div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M9 14l2.2 2.2L15.5 12"/></svg></div><div class="wm">Yo<span>git</span></div><div class="tag">דוחות בדק בית, פשוט מהשטח</div></div>
- <form onsubmit="doLogin();return false" onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin()}" autocomplete="on"><label for="lu">שם משתמש</label><input id="lu" name="username" autocomplete="username" autocapitalize="off" value=""><label for="lp">סיסמה</label><input id="lp" name="password" type="password" autocomplete="current-password"><div class="err" id="lerr"></div><button class="btn" type="button" onclick="doLogin()" style="margin-bottom:0">כניסה</button></form>
- <div class="hint">גרסת דמו – כל שם משתמש וסיסמה יתקבלו</div></div>`}
-function doLogin(){const u=$('lu').value.trim(),p=$('lp').value;if(!u||!p){$('lerr').textContent='נא למלא שם משתמש וסיסמה';return}_usr=u;try{localStorage.setItem(USERK,u)}catch(e){}S.tab='reports';render()}
+ <form onsubmit="doLogin();return false" onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin()}" autocomplete="on"><label for="lu">שם משתמש</label><input id="lu" name="username" autocomplete="username" autocapitalize="off" value=""><label for="lp">סיסמה</label><input id="lp" name="password" type="password" autocomplete="current-password"><div class="err" id="lerr"></div><button class="btn" type="button" id="lbtn" onclick="doLogin()" style="margin-bottom:0">כניסה</button></form></div>`}
+async function doLogin(){const u=$('lu').value.trim(),p=$('lp').value;if(!u||!p){$('lerr').textContent='נא למלא שם משתמש וסיסמה';return}
+  const btn=$('lbtn');btn.disabled=true;
+  const h=await sha256Hex(u.toLowerCase()+':'+p);
+  btn.disabled=false;
+  if(h!==AUTH_HASH){$('lerr').textContent='שם משתמש או סיסמה שגויים';$('lp').value='';$('lp').focus();return}
+  $('lerr').textContent='';_usr=u;try{localStorage.setItem(USERK,u)}catch(e){}S.tab='reports';render()}
 function logout(){_usr='';try{localStorage.removeItem(USERK)}catch(e){}S.tab='reports';S.rid=null;render()}
 
 function render(){
