@@ -418,7 +418,8 @@ function setView(){return `<h2>הגדרות</h2>
 function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='bedek-backup-'+Date.now()+'.json';a.click()}
 function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.repo)throw 0;db=d;save();alert('שוחזר');render()}catch(e){alert('קובץ לא תקין')}};r.readAsText(f)}
 
-const USERK='yogit_user_v1';
+const USERK='yogit_user_v2';
+try{localStorage.removeItem('yogit_user_v1')}catch(e){}
 const AUTH_HASH='ae08f6eb355fb5007e6a1af524cdde7d8e5b12771ca4f94cd206fe67038d7455';
 let _usr='';
 async function sha256Hex(s){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')}
